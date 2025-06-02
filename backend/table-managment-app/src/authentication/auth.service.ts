@@ -20,18 +20,18 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user._id, name: user.name }; // Include name in payload
+    const payload = { email: user.email, sub: user._id, name: user.name , role: user.role }; // Include name in payload
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async register(email: string, password: string, name: string): Promise<any> {
+  async register(email: string, password: string, name: string , role: string): Promise<any> {
     const existingUser = await this.userService.findByEmail(email);
     if (existingUser) {
       throw new UnauthorizedException('Email already in use');
     }
-    const newUser = await this.userService.createUser(email, password, name);
+    const newUser = await this.userService.createUser(email, password, name , role);
     const { password: _, ...result } = newUser.toObject();
     return result;
   }

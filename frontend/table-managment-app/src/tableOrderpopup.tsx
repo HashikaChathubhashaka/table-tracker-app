@@ -14,7 +14,7 @@ type TablePopupModalProps = {
   onClose: () => void;
 };
 
-// 🔁 Custom hook to fetch data
+// Custom hook to fetch data
 function useTableItems(tableNumber: string | undefined) {
   const [tableItems, setTableItems] = useState<TableItems[]>([]);
 

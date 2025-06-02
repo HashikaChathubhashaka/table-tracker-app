@@ -31,6 +31,7 @@ type OrderStatus = {
   function Home() {
     const {logout} = useAuth();
     const {userName} = useAuth();
+    const {userRole} = useAuth();
     const navigate = useNavigate();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -50,6 +51,7 @@ type OrderStatus = {
       setIsOrderPopupOpen(false);
     }
 
+    const tableCount = 10;
 
     useEffect(() => {
       // Fetch initial data
@@ -133,7 +135,7 @@ type OrderStatus = {
       }
     };
 
-    const tableCount = 10;
+
 
   
     // Close Order Status Popup
@@ -172,6 +174,22 @@ type OrderStatus = {
         Log Out
 
     </Button>
+
+
+
+    {userRole && userRole === "Admin" && (
+      <Button
+        variant="contained"
+        onClick={() => {
+          navigate('/admin-user-settings');
+        }}
+        color="secondary"
+      >
+        Admin Settings
+      </Button>
+    )}
+
+
   <Box sx={{ textAlign: 'center', mb: 4 , mt:4 }}>
     <Typography variant="h2" gutterBottom>
       Table Tracker App

@@ -20,5 +20,6 @@ dotenv.config(); // Load environment variables from .env file
   ],
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
+
 })
 export class AuthModule {}
