@@ -1,0 +1,20 @@
+## WEB SOCKET
+socket.io URL
+http://localhost:3000
+
+
+## UPDATE STATUS OF TABLE
+@PUT data to table 
+http://localhost:3000/table-status/table2
+
+{
+  "ordered": true
+}
+
+## TO GET ALL THE TABLE STATUS
+@GET
+http://localhost:3000/table-status
+
+## GET CERTAIN TABLE STATUS
+@GET
+http://localhost:3000/table-status/table1
