@@ -68,18 +68,22 @@ const PopupModal: React.FC<PopupModalProps> = ({ isOpen, onClose, onSave, initia
   <Paper
     elevation={3}
     sx={{
-      backgroundColor: "#e8eaf6",
+      backgroundColor: "#F9FAFB",
       color: "black",
-      padding: 3,
-      borderRadius: 8,
-      width: 300,
+      padding: { xs: 2, sm: 3 },
+      borderRadius: 5,
+      width: { xs: "70vw", sm: 350, md: 380 },
+      maxWidth: "100vw",
+      height: { xs: "auto", sm: 550, md: 550 },
+      maxHeight: { xs: "80vh", sm: 530, md: 600 },
       display: "flex",
       flexDirection: "column",
       gap: 2,
       textAlign: "left",
+      boxSizing: "border-box",
+      overflowY: "auto",
     }}
   >
-
 
         <h2 style={{ textAlign: "center" }}>Order Status</h2>
 

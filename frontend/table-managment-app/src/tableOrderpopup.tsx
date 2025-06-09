@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Backdrop, Paper, Button } from '@mui/material';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 type TableItems = {
   name: string;
   price: number;
@@ -21,7 +24,7 @@ function useTableItems(tableNumber: string | undefined) {
   useEffect(() => {
     if (!tableNumber) return;
     axios
-    .get(`http://localhost:3000/table-items/${tableNumber}`)
+    .get(`${API_BASE_URL}/table-items/${tableNumber}`)
     .then((res) => setTableItems(res.data))
     .catch((err) => console.error(err));
   }, [tableNumber]);
@@ -39,11 +42,12 @@ const TablePopupModel: React.FC<TablePopupModalProps> = ({ tableNum, isOpen, onC
       <Paper
         elevation={4}
         sx={{
-          backgroundColor: '#e8eaf6',
-          padding: 4,
+          backgroundColor: '#F9FAFB',
+          padding: { xs: 2, sm: 4 },
           borderRadius: 4,
-          minWidth: 400,
-          maxHeight: '80vh',
+          minWidth: { xs: '85vw', sm: 400 },
+          maxWidth: { xs: '90vw', sm: 600 },
+          maxHeight: { xs: '70vh', sm: '80vh' }, // Responsive height
           overflowY: 'auto',
           position: 'relative',
         }}
@@ -60,20 +64,20 @@ const TablePopupModel: React.FC<TablePopupModalProps> = ({ tableNum, isOpen, onC
 
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
-            <tr>
-            <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>Item Name</th>
-            <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>Price</th>
-            <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>Quantity</th>
-            </tr>
+        <tr>
+        <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>Item Name</th>
+        <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>Price</th>
+        <th style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>Quantity</th>
+        </tr>
           </thead>
           <tbody>
-            {tableItems.map((item, index) => (
-              <tr key={index}>
-                <td style={{ padding: '8px 0' }}>{item.name}</td>
-                <td>Rs.{item.price}</td>
-                <td>{item.quantity}</td>
-              </tr>
-            ))}
+        {tableItems.map((item, index) => (
+          <tr key={index}>
+            <td style={{ padding: '8px 0' }}>{item.name}</td>
+            <td>Rs.{item.price}</td>
+            <td>{item.quantity}</td>
+          </tr>
+        ))}
           </tbody>
         </table>
       </Paper>

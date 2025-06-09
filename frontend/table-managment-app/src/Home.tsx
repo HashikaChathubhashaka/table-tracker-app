@@ -9,8 +9,13 @@ import { Card, CardContent, Typography, Button, Stack } from '@mui/material';
 import { Grid , Box} from '@mui/material';
 import TablePopupModel from "./tableOrderpopup";
 
+import SettingsIcon from '@mui/icons-material/Settings';
 
-const socket = io("http://localhost:3000");
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// Use API_BASE_URL for socket.io
+const socket = io(API_BASE_URL);
 
 type OrderStatus = {
     ordered: boolean;
@@ -50,10 +55,28 @@ type OrderStatus = {
       setIsOrderPopupOpen(false);
     }
 
+<<<<<<< Updated upstream
+=======
+    const [tableCount, setTableCount] = useState<number>(5);
+
+    useEffect(() => {
+      axios.get(`${API_BASE_URL}/settings/table-count`)
+      .then(res => {
+        if (typeof res.data === 'number') {
+        setTableCount(res.data);
+        } else if (res.data && typeof res.data.tableCount === 'number') {
+        setTableCount(res.data.tableCount);
+        }
+      })
+      .catch(err => {
+        console.error('Failed to fetch table count:', err);
+      });
+    }, []);
+>>>>>>> Stashed changes
 
     useEffect(() => {
       // Fetch initial data
-      axios.get('http://localhost:3000/table-status')
+      axios.get(`${API_BASE_URL}/table-status`)
         .then(res => {
           const updatedStatus: any = {};
           res.data.forEach((entry: any) => {
@@ -109,27 +132,20 @@ type OrderStatus = {
     };
 
     const clearTable = (table: number) => {
-
-      axios.delete(`http://localhost:3000/table-items/${table}`)
+      axios.delete(`${API_BASE_URL}/table-items/${table}`)
       //make the all status false
-      axios.put(`http://localhost:3000/table-status/table${table}`, { ordered: false , preparing: false , prepared: false , served: false , billed: false })
-
-
-      
+      axios.put(`${API_BASE_URL}/table-status/table${table}`, { ordered: false , preparing: false , prepared: false , served: false , billed: false })
     };
   
     // Save Order Status
     const savePopup = (status: OrderStatus) => {
       //use the put method to update the status of the selected table
       if (selectedTable) {
-        axios.put(`http://localhost:3000/table-status/${selectedTable}`, status)
+        axios.put(`${API_BASE_URL}/table-status/${selectedTable}`, status)
           .then(() => {
             console.log("Status updated successfully");
           })
           .catch(err => console.error("Error updating status:", err));
-
-          
-
       }
     };
 
@@ -151,30 +167,38 @@ type OrderStatus = {
 
 
   sx={{
-    height: '100vh',
+    height: '90vh',
     overflowY: 'auto',
     padding: 2,
     boxSizing: 'border-box',
   }}
 >
 
-<Button
-      
-      variant="contained"
+<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', mt: { xs: 1, sm: 1, md: 1 } }}>
+  {userRole && userRole === "Admin" && (
+    <Button
+      variant="outlined"
       onClick={() => {
-        logout();
-        navigate('/');
+        navigate('/admin-user-settings');
       }}
-      
-      color="secondary"
-      
-      >
-        Log Out
-
+      color="primary"
+      endIcon={<SettingsIcon />}
+    >
+      Admin
     </Button>
+<<<<<<< Updated upstream
   <Box sx={{ textAlign: 'center', mb: 4 , mt:4 }}>
     <Typography variant="h2" gutterBottom>
       Table Tracker App
+=======
+  )}
+</Box>
+
+
+  <Box sx={{ textAlign: 'center', mb: 2  }}>
+    <Typography variant="h3" sx={{ fontWeight: 'bold' }}>
+      Table Status
+>>>>>>> Stashed changes
     </Typography>
     <Typography variant="h6">User: {userName}</Typography>
   </Box>

@@ -28,4 +28,9 @@ export class ItemsService {
     return this.itemModel.findByIdAndDelete(id).exec();
   }
   
+  // Add to items.service.ts
+  async removeByName(name: string) {
+    return this.itemModel.deleteOne({ name });
+  }
+  
 }

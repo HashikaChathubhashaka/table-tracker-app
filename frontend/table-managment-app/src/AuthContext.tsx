@@ -19,7 +19,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (token) {
       const decoded = decodeToken(token);
       setUserName(decoded?.name || null);
+<<<<<<< Updated upstream
       console.log('Decoded name:', decoded?.name);
+=======
+      setUserRole(decoded?.role || null);
+>>>>>>> Stashed changes
     }
   }, [token]);
 
@@ -29,6 +33,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     const decoded = decodeToken(newToken);
     setUserName(decoded?.name || null);
+    setUserRole(decoded?.role || null);
   };
 
   const logout = () => {

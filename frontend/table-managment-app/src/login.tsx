@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router';
 import { useAuth } from './AuthContext';
 import { Box, Button, TextField, Typography, Paper } from "@mui/material";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,9 +15,8 @@ function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3000/auth/login', { email, password });
+      const res = await axios.post(`${API_BASE_URL}/auth/login`, { email, password });
       const token = res.data.access_token;
-      console.log('Token:', token); // Debugging line
       login(token);
 
       navigate('/home');
@@ -27,16 +28,16 @@ function Login() {
   return (
     
     <div>
-
+    
     <Box
     sx={{
       display: "flex",
       flexDirection:"vertical",
       justifyContent: "center",
       alignItems: "center",
-      height: "100vh",
+      height: "80vh",
       width: "100vw",
-      backgroundColor: "#3f51b5",
+      backgroundColor: "#F9FAFB",
     }}
     >
       <Paper
@@ -50,9 +51,8 @@ function Login() {
         }}
       >
         <Typography variant="h4" gutterBottom>
-          Login 
+          Log in 
         </Typography>
-        <h3>Table Tracker App</h3>
 
         <form onSubmit={handleSubmit}>
           <TextField

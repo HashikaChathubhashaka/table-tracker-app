@@ -6,6 +6,9 @@ import { useAuth } from './AuthContext';
 import Paper from '@mui/material/Paper';
 import { Card, CardContent, Typography, Button, Stack } from '@mui/material';
 import Grid from '@mui/material/Grid';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 import './ItemMenu.css'; // 
 import {
     Table,
@@ -17,6 +20,8 @@ import {
 
   } from "@mui/material";
 
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 /* category
 name , price
@@ -40,30 +45,22 @@ type TableItems = {
 }
 
 function fetchMenuItems() {
-
     const [menuItems, setMenuItems] = useState<Items[] >([]);
-
     useEffect(() => {
-        axios.get('http://localhost:3000/items')
+        axios.get(`${API_BASE_URL}/items`)
         .then(res => setMenuItems(res.data))
         .catch(err => console.error(err));
     }, []);
-
     return menuItems;
 }
 
 function fetchTableItems(tableNumber: string | undefined) {
-    
     const [tableItems, setTableItems] = useState< TableItems[] >([]);
-
     useEffect(() => {
-        axios.get(`http://localhost:3000/table-items/${tableNumber}`)
+        axios.get(`${API_BASE_URL}/table-items/${tableNumber}`)
         .then(res => setTableItems(res.data))
         .catch(err => console.error(err));
     }, []);
-
-
-
     return tableItems;
 }
 
@@ -107,38 +104,30 @@ function ItemMenu(){
         console.log(orderData);
         // axios.put(`http://localhost:3000/table-status/${tableNumber}`, orderData)
         console.log(JSON.stringify(orderData, null, 2));
-        axios.put(`http://localhost:3000/table-items/${tableNumber}`, orderData)
-
+        axios.put(`${API_BASE_URL}/table-items/${tableNumber}`, orderData)
         // checking the order list is empty or not
         // if empty , make the ordered status false
         // if not empty , make the ordered status true
         const orderedStatus = orderData.length > 0 ? true : false;
         console.log(orderedStatus);
-        axios.put(`http://localhost:3000/table-status/table${tableNumber}`, { ordered: orderedStatus , orderedBy: userName })
-        
-        navigate("/home");
-    
-    
+        axios.put(`${API_BASE_URL}/table-status/table${tableNumber}`, { ordered: orderedStatus , orderedBy: userName })
+        navigate("/home"); // after clicking the Process order -> it will go to home 
     }
 
-
-
-
-    
 return (
     
+  <div>
+    <div className="centered-container">
     <div>
 
 
-    <div className="centered-container">
-  <div>
-    <Button color="secondary" variant="contained" onClick={() => navigate("/home")} sx={{ mb: 2 }}>
-            Back to Home
-        </Button>
-
-    <h1 className="menu-title">Item Menu</h1>
-    <p className="table-info">Selected Table: {tableNumber}</p>
-</div>
+      <Typography variant="h3"  sx={{ fontWeight: 'bold', mt: 5, mb: 1 }}>
+        Item Menu
+      </Typography>
+      <Typography variant="subtitle1" className="table-info" sx={{ mb: 2 }}>
+        Selected Table: {tableNumber}
+      </Typography>
+    </div>
     <div
   style={{
     display: "flex",
@@ -154,54 +143,63 @@ return (
     <div
       key={category}
       style={{
-        backgroundColor: "#e3f2fd",
-        color: "black",
-        padding: "16px",
-        borderRadius: "8px",
-        width: "350px", // Consistent width per card
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        // justifyContent: "space-between",
+      backgroundColor: "#eeeeee",
+      color: "black",
+      padding: "16px",
+      borderRadius: "8px",
+      width: "350px", // Consistent width per card
+      boxSizing: "border-box",
+      display: "flex",
+      flexDirection: "column",
+      // justifyContent: "space-between",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.15)", // <-- Added box shadow
       }}
     >
       <h2>{category}</h2>
       <ul style={{ listStyle: "none", padding: 0 }}>
-        {menuItems
-          .filter((item) => item.category === category)
-          .map((item, index) => (
-            <li
-              key={index}
-              style={{ marginBottom: "12px", textAlign: "left" }}
-            >
-              <strong>{item.name}</strong>
-              <div>Rs. {item.price.toFixed(2)}</div>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  const existingItem = tableItems.find(
-                    (tableItem) => tableItem.name === item.name
-                  );
-                  if (existingItem) {
-                    setTableItems(
-                      tableItems.map((tableItem) =>
-                        tableItem.name === item.name
-                          ? {
-                              ...tableItem,
-                              quantity: tableItem.quantity + 1,
-                            }
-                          : tableItem
-                      )
-                    );
-                  } else {
-                    setTableItems([...tableItems, { ...item, quantity: 1 }]);
-                  }
-                }}
-              >
-                Add
-              </Button>
-            </li>
-          ))}
+      {menuItems
+        .filter((item) => item.category === category)
+        .map((item, index) => (
+      <li
+        key={index}
+        style={{
+        marginBottom: "12px",
+        textAlign: "left",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between", // space between text and button
+        gap: "12px",
+        }}
+      >
+        <div>
+        <strong>{item.name}</strong>
+        <div>Rs. {item.price.toFixed(2)}</div>
+        </div>
+        <Button
+        variant="outlined"
+        startIcon={<AddIcon />}
+        size="small"
+        onClick={() => {
+          const existingItem = tableItems.find(
+          (tableItem) => tableItem.name === item.name
+          );
+          if (existingItem) {
+          setTableItems(
+            tableItems.map((tableItem) =>
+            tableItem.name === item.name
+              ? { ...tableItem, quantity: tableItem.quantity + 1 }
+              : tableItem
+            )
+          );
+          } else {
+          setTableItems([...tableItems, { ...item, quantity: 1 }]);
+          }
+        }}
+        >
+        add
+        </Button>
+      </li>
+        ))}
       </ul>
     </div>
   ))}
@@ -212,7 +210,7 @@ return (
 <TableContainer
   component={Paper}
   sx={{
-    backgroundColor: "#e3f2fd",
+    backgroundColor: "#eeeeee",
     padding: "20px",
     borderRadius: "8px",
     marginTop: "60px",
@@ -220,9 +218,10 @@ return (
     maxWidth: "800px",
     marginInline: "auto",
     color: "black",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.15)"
   }}
 >
-  <Typography variant="h5" sx={{ mb: 2 }}>
+  <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold" }}>
     Selected Items
   </Typography>
 
@@ -246,6 +245,8 @@ return (
             <Button
               variant="outlined"
               color="error"
+              size="small"
+              startIcon={<DeleteIcon />}
               onClick={() => {
                 const existingItem = tableItems.find(
                   (tableItem) => tableItem.name === item.name
@@ -281,7 +282,7 @@ return (
   <Button
     onClick={processOrder}
     variant="contained"
-    color="success"
+    color="primary"
     sx={{
       display: "block",
       margin: "40px auto 50px",

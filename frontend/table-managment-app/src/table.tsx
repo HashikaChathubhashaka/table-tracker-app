@@ -3,6 +3,9 @@ import { useParams,BrowserRouter as Router, Route, Routes, useNavigate } from "r
 import { useEffect } from 'react';
 import axios from 'axios';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 type TableItems = {
 
     name: string;
@@ -14,7 +17,7 @@ function fetchTableItems(tableNumber: string | undefined) {
     const [tableItems, setTableItems] = useState< TableItems[] >([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:3000/table-items/${tableNumber}`)
+        axios.get(`${API_BASE_URL}/table-items/${tableNumber}`)
         .then(res => setTableItems(res.data))
         .catch(err => console.error(err));
     }, []);
