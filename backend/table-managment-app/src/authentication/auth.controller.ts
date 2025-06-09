@@ -1,5 +1,8 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from './roles.guard';
+import { Roles } from './roles.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -16,8 +19,10 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() body: { email: string; password: string; name: string }) {
-    const { email, password, name } = body; // Include name in the request body
-    return this.authService.register(email, password, name);
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles('Admin')
+  async register(@Body() body: { email: string; password: string; name: string ; role:string }) {
+    const { email, password, name , role } = body; // Include name in the request body
+    return this.authService.register(email, password, name , role);
   }
 }

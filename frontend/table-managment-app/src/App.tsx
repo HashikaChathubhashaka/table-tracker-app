@@ -4,6 +4,7 @@ import Home from "./Home";
 import Table from "./table";
 import Login from "./login";
 import PrivateRoute from "./privateRoute";
+import AdminSettings from "./AdminSettings";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
           
           } />
         <Route path="/table/:tableNumber" element={<Table />} />
+
+        <Route path="/admin-user-settings" element={
+          <PrivateRoute>
+          <AdminSettings />
+          </PrivateRoute>
+          } />
+
+
       </Routes>
     </Router>
 

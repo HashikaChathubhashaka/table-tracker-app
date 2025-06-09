@@ -12,9 +12,7 @@ html, body {
     align-items: center;      /* horizontal centering */
     height: 100vh;
     width: 100vw;             
-     /* <--- Add this */
-
-    color: white;
+    color: #111827;
     margin: 0;                 /* remove default margin if any */
   }
   

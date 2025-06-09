@@ -11,6 +11,9 @@ export class User extends Document {
 
   @Prop({ required: true })
   name: string; // Add name field
+
+  @Prop({ required: true, enum: ['Admin', 'Normal'] })
+  role: string; // Restrict role to Admin or Normal
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
